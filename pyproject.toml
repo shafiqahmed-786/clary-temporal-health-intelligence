@@ -1,0 +1,152 @@
+[build-system]
+requires = ["setuptools>=70.0", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+# ══════════════════════════════════════════════════════════
+# Project metadata
+# ══════════════════════════════════════════════════════════
+[project]
+name            = "clary"
+version         = "1.0.0"
+description     = "Clary — Temporal Health Intelligence AI by Ask First"
+readme          = "README.md"
+requires-python = ">=3.11"
+license         = { text = "Proprietary" }
+authors         = [{ name = "Ask First Engineering" }]
+keywords        = [
+    "health-ai", "temporal-reasoning", "llm-agents",
+    "pattern-detection", "streamlit",
+]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: Streamlit",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# ══════════════════════════════════════════════════════════
+# Black — code formatter
+# ══════════════════════════════════════════════════════════
+[tool.black]
+line-length    = 88
+target-version = ["py311", "py312"]
+include        = '\.pyi?$'
+exclude        = '''
+/(
+    \.eggs | \.git | \.hg | \.mypy_cache | \.nox |
+    \.tox | \.venv | _build | buck-out | build | dist
+)/
+'''
+
+# ══════════════════════════════════════════════════════════
+# Ruff — fast linter (replaces flake8 + isort + pyupgrade)
+# ══════════════════════════════════════════════════════════
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+    "SIM",  # flake8-simplify
+    "TCH",  # flake8-type-checking
+    "ANN",  # flake8-annotations (type hints)
+    "RUF",  # Ruff-specific rules
+]
+ignore = [
+    "E501",    # line too long — handled by Black
+    "ANN101",  # self annotation
+    "ANN102",  # cls annotation
+    "ANN401",  # Any type allowed in agent internals
+    "B008",    # function call in default arg (pydantic Field)
+    "N805",    # first arg not 'self' (pydantic validators)
+    "RUF012",  # Mutable class var — false positive with Pydantic
+]
+
+[tool.ruff.lint.isort]
+known-first-party  = ["agents", "memory", "schemas", "temporal", "graph", "app"]
+force-sort-within-sections = true
+
+[tool.ruff.lint.per-file-ignores]
+"app/**"         = ["ANN"]   # Less strict annotation rules for UI
+"eval/**"        = ["ANN"]
+"**/tests/**"    = ["ANN", "S101"]
+
+# ══════════════════════════════════════════════════════════
+# mypy — static type checker
+# ══════════════════════════════════════════════════════════
+[tool.mypy]
+python_version          = "3.11"
+strict                  = false
+warn_return_any         = true
+warn_unused_configs     = true
+warn_redundant_casts    = true
+warn_unused_ignores     = true
+disallow_untyped_defs   = true
+disallow_any_generics   = false
+check_untyped_defs      = true
+no_implicit_optional    = true
+show_error_codes        = true
+pretty                  = true
+
+# Per-module overrides
+[[tool.mypy.overrides]]
+module = [
+    "chromadb.*",
+    "pyvis.*",
+    "neo4j.*",
+    "celery.*",
+    "structlog.*",
+    "plotly.*",
+    "streamlit.*",
+]
+ignore_missing_imports = true
+
+# ══════════════════════════════════════════════════════════
+# pytest
+# ══════════════════════════════════════════════════════════
+[tool.pytest.ini_options]
+minversion     = "8.0"
+asyncio_mode   = "auto"
+testpaths      = ["agents/tests", "temporal/tests", "memory/tests", "eval"]
+addopts        = [
+    "--tb=short",
+    "--strict-markers",
+    "-q",
+]
+markers = [
+    "integration: marks tests requiring live infrastructure (Neo4j, ChromaDB, Redis)",
+    "slow: marks tests taking > 5s (pattern detection with real LLM calls)",
+    "eval: marks evaluation harness tests against golden patterns",
+    "unit: fast unit tests with no external dependencies",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+# ══════════════════════════════════════════════════════════
+# Coverage
+# ══════════════════════════════════════════════════════════
+[tool.coverage.run]
+source    = ["agents", "memory", "schemas", "temporal", "graph"]
+omit      = ["*/tests/*", "app/**", "eval/**"]
+branch    = true
+
+[tool.coverage.report]
+fail_under         = 70
+show_missing       = true
+skip_covered       = false
+exclude_lines      = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@abstractmethod",
+]

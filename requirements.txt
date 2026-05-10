@@ -1,0 +1,87 @@
+# ══════════════════════════════════════════════════════════
+# Clary — Ask First Health Intelligence
+# requirements.txt
+# Generated to match all actual imports across the codebase.
+# Pin minor versions; allow patch updates.
+# ══════════════════════════════════════════════════════════
+
+# ── Core Python / runtime ──────────────────────────────────
+python-dotenv>=1.0.0,<2.0.0          # .env loading for pydantic-settings
+
+# ── Pydantic / config ──────────────────────────────────────
+pydantic>=2.6.0,<3.0.0               # All schemas (v2 API)
+pydantic-settings>=2.2.0,<3.0.0      # Settings from env vars
+
+# ── OpenAI ────────────────────────────────────────────────
+openai>=1.30.0,<2.0.0                # AsyncOpenAI, chat completions, embeddings
+tiktoken>=0.7.0,<1.0.0               # Token counting for context budgeting
+
+# ── LangChain (optional instrumentation) ──────────────────
+langchain>=0.2.0,<0.4.0              # Agent chains, prompt templates
+langchain-openai>=0.1.0,<0.3.0       # OpenAI integration for LangChain
+langsmith>=0.1.0,<0.3.0              # Tracing / observability
+
+# ── Vector store / embeddings ─────────────────────────────
+chromadb>=0.5.0,<1.0.0               # Async HTTP client + collections
+
+# ── Graph database ────────────────────────────────────────
+neo4j>=5.20.0,<6.0.0                 # AsyncGraphDatabase driver
+
+# ── Redis (async) ─────────────────────────────────────────
+redis[asyncio]>=5.0.0,<6.0.0         # redis.asyncio working memory
+
+# ── Async utilities ───────────────────────────────────────
+nest-asyncio>=1.6.0,<2.0.0           # Async bridge for Streamlit sync context
+anyio>=4.3.0,<5.0.0                  # Async IO compatibility layer
+httpx>=0.27.0,<1.0.0                 # Async HTTP (used internally by openai)
+aiohttp>=3.9.0,<4.0.0                # Async HTTP (chromadb dependency)
+
+# ── Retry / resilience ────────────────────────────────────
+tenacity>=8.3.0,<9.0.0               # BaseAgent retry with exponential backoff
+
+# ── Structured logging ────────────────────────────────────
+structlog>=24.1.0,<25.0.0            # All agents + memory modules
+
+# ── Database (PostgreSQL) ─────────────────────────────────
+asyncpg>=0.29.0,<1.0.0               # Async PostgreSQL driver
+sqlalchemy[asyncio]>=2.0.0,<3.0.0    # ORM (async) for session persistence
+
+# ── Streamlit UI ──────────────────────────────────────────
+streamlit>=1.35.0,<2.0.0             # App framework
+watchdog>=4.0.0,<5.0.0               # Streamlit file-watching (dev mode)
+
+# ── Plotting ──────────────────────────────────────────────
+plotly>=5.22.0,<6.0.0                # All chart types (scatter, bar, heatmap, box)
+kaleido>=0.2.1,<1.0.0                # Plotly static image export
+
+# ── Data / numerics ───────────────────────────────────────
+pandas>=2.2.0,<3.0.0                 # DataFrame ops in timeline + eval
+numpy>=1.26.0,<2.0.0                 # Numerical utilities
+pyarrow>=16.0.0,<17.0.0              # Parquet / Streamlit dataframe acceleration
+
+# ── Graph visualisation ───────────────────────────────────
+pyvis>=0.3.2,<1.0.0                  # Interactive network HTML (Neo4j subgraph)
+networkx>=3.3.0,<4.0.0               # Graph algorithms + NetworkX export
+
+# ── Structured LLM output (optional) ─────────────────────
+instructor>=1.3.0,<2.0.0             # Structured extraction from OpenAI responses
+
+# ── Jinja2 (prompt templating) ────────────────────────────
+jinja2>=3.1.0,<4.0.0                 # Prompt template rendering
+
+# ── Task queue (Celery) ───────────────────────────────────
+celery[redis]>=5.4.0,<6.0.0          # Async pattern analysis workers
+flower>=2.0.0,<3.0.0                 # Celery monitoring dashboard
+
+# ── Testing ───────────────────────────────────────────────
+pytest>=8.2.0,<9.0.0
+pytest-asyncio>=0.23.0,<1.0.0        # Async test support
+pytest-cov>=5.0.0,<6.0.0             # Coverage reporting
+httpx>=0.27.0                        # Test HTTP client (already listed)
+respx>=0.21.0,<1.0.0                 # Mock httpx calls in tests
+
+# ── Code quality ──────────────────────────────────────────
+black>=24.4.0,<25.0.0                # Code formatter
+ruff>=0.4.0,<1.0.0                   # Fast linter (replaces flake8)
+mypy>=1.10.0,<2.0.0                  # Static type checker
+types-redis>=4.6.0,<5.0.0            # Type stubs for redis
