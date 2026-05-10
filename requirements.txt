@@ -57,7 +57,7 @@ kaleido>=0.2.1,<1.0.0                # Plotly static image export
 # ── Data / numerics ───────────────────────────────────────
 pandas>=2.2.0,<3.0.0                 # DataFrame ops in timeline + eval
 numpy>=1.26.0,<2.0.0                 # Numerical utilities
-pyarrow>=16.0.0,<17.0.0              # Parquet / Streamlit dataframe acceleration
+
 
 # ── Graph visualisation ───────────────────────────────────
 pyvis>=0.3.2,<1.0.0                  # Interactive network HTML (Neo4j subgraph)
